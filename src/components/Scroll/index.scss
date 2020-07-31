@@ -1,0 +1,23 @@
+.lhy-scroll__wrapper {
+    overflow: hidden;
+}
+
+
+
+.lhy-scroll__pullUp {
+    text-align: center;
+    line-height: 50px;
+    font-size: 14px;
+    color: #999999;
+}
+
+.lhy-pull-refresh__wrapper {
+    position: absolute;
+    width: 100%;
+    box-sizing: border-box;
+    transform: translateY(-100%) translateZ(0);
+    text-align: center;
+    color: #999;
+    z-index: -1;
+    padding-bottom: 8px;
+}

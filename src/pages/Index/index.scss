@@ -1,0 +1,11 @@
+.menu-item {
+  width: 172px;
+  height: 189px;
+}
+.menu-item:not(:nth-child(2n)) {
+  margin-right: 11px;
+}
+.menu-icon {
+  width: 66px;
+  height: 66px;
+}

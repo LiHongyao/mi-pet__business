@@ -1,0 +1,65 @@
+.upload-goods {
+  .form-item {
+    height: 46px;
+  }
+
+  .details-image-picker {
+    .am-image-picker-list {
+      padding: 0;
+      overflow-x: scroll;
+    }
+
+    .am-flexbox-item {
+      width: 80px;
+      height: 94px;
+    }
+
+    .am-image-picker-item-content {
+      background-position: center center;
+    }
+  }
+
+  .publish-button {
+    width: 197px;
+    height: 44px;
+  }
+
+  // 列表样式
+  .lee-title-wrapper {
+    width: 52px;
+    display: flex;
+    justify-content: space-between;
+    margin-right: 21px;
+    font-size: 13px;
+    color: #272727;
+  }
+
+  .am-list-content {
+    display: flex;
+    align-items: center;
+  }
+
+  .am-list-extra {
+    display: none !important;
+  }
+
+  .am-list-item {
+    padding: 0;
+    height: 46px;
+  }
+
+  .am-list-body::before,
+  .am-list-body::after {
+    height: 0 !important;
+  }
+
+  .am-list-content,
+  .am-input-control>input,
+  .am-list-extra {
+    font-size: 13px !important;
+  }
+
+  .value {
+    color: #828282 !important;
+  }
+}
