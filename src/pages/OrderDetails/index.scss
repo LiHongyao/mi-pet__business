@@ -1,0 +1,73 @@
+.lg-field {
+  padding: 0 12px;
+  background-color: #F8F8F8;
+  border-radius: 7px;
+}
+.lg-field__control {
+  background-color: transparent;
+}
+
+
+
+.am-steps .am-steps-item-title {
+  color: #393939;
+  font-size: 12px;
+  line-height: 17px;
+}
+.am-steps .am-steps-item-description {
+  color: #2D2D2D;
+}
+.am-steps .am-steps-item-finish .am-steps-item-tail:after  {
+  background-color: #F82F5C;
+}
+
+
+
+
+.am-list-content {
+  display: flex;
+  align-items: center;
+}
+.am-list-item {
+  padding: 0;
+  height: 35px;
+}
+
+.am-list-body::before,
+.am-list-body::after {
+  height: 0 !important;
+}
+
+.am-list-content,
+.am-input-control>input,
+.am-list-extra {
+  font-size: 13px !important;
+}
+
+.value {
+  color: #828282 !important;
+}
+
+.details-image-picker {
+  .am-image-picker-list {
+    padding: 0;
+    overflow-x: scroll;
+  }
+
+  .am-flexbox-item {
+    width: 80px;
+    height: 94px;
+  }
+
+  .am-image-picker-item-content {
+    background-position: center center;
+  }
+}
+.publish-button {
+  width: 197px;
+  height: 44px;
+}
+.add-spec {
+  width: 100px;
+  height: 30px;
+}

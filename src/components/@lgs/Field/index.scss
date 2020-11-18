@@ -1,0 +1,27 @@
+.lg-field {
+  height: 30px;
+  display: flex;
+  flex: 1;
+  align-items: center;
+}
+.lg-field.round {
+  border-radius: 20px;
+}
+
+.lg-field__control {
+  box-sizing: border-box;
+  flex: 1;
+  height: 100%;
+  font-size: 13px;
+  color: #272727;
+  background-color: transparent;
+}
+.lg-field__control::placeholder {
+  color:#A8A8A8;
+  font-size: 13px;
+}
+.lg-field__clear {
+  width: 13px;
+  height: 13px;
+  margin-left: 20px;
+}

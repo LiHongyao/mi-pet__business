@@ -1,0 +1,13 @@
+.lg-button {
+  display: inline-block;
+  width: 184px;
+  height: 41px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #FFFFFF;
+  font-size: 14px;
+}
+.lg-button.round {
+  border-radius: 21px;
+}

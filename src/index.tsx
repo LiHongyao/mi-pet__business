@@ -1,3 +1,6 @@
+import "core-js/stable";
+import "regenerator-runtime/runtime";
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -6,12 +9,29 @@ import 'antd-mobile/dist/antd-mobile.css';
 import 'amfe-flexible'
 import './assets/css/global.css'
 
+import Validator from './utils/validator'
+
 
 import App from './App';
+import NotWeixin from './pages/NotWeixin'
 import * as serviceWorker from './serviceWorker';
 
+import { Toast } from 'antd-mobile'
+Toast.config({
+  duration: 1
+});
+
+
+const _App = Validator.weixin() ?  (
+  <App />
+) : (
+  <NotWeixin />
+);
+
+
+
 ReactDOM.render(
-  <App />,
+   _App,
   document.getElementById('root')
 );
 

@@ -1,0 +1,8 @@
+.lg-scroll  {
+  margin-top: 6px;
+  height: calc(100% - 56px);
+}
+
+.lg-scroll .lg-scroll__content {
+  min-height: calc(100% - 55px);
+}

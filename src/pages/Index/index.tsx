@@ -1,7 +1,8 @@
 import React from 'react'
 import { useTitle } from '../../hooks/index'
-import './index.scss'
 import { useHistory } from 'react-router'
+import './index.scss'
+
 const data = [
   {
     title: '上传商品',
@@ -15,7 +16,8 @@ const data = [
   },
   {
     title: '商品管理',
-    icon: require('../../assets/images/icon_goods_mag.png')
+    icon: require('../../assets/images/icon_goods_mag.png'),
+    path: '/goods-management'
   },
 ]
 
@@ -24,14 +26,15 @@ const Index = () => {
   // hooks
   useTitle('首页');
   // events
-  const onItemTap = (path: string | undefined) => {
-    path && history.push(path);
+  const onItemTap = (path: string) => {
+    history.push(path);
   }
+
+  // render
   return (
-    <div className="page d-flex flex-wrap px-10 pt-10">
-      {/* 渲染菜单 */}
+    <div className="home d-flex justify-content-between flex-wrap px-10 pt-10">
       {data.map(item => (
-        <section className="menu-item bg-FFFFFF flex-v-center mb-10 rounded-10" key={item.title} onClick={() => { onItemTap(item.path)}}>
+        <section className="menu-item bg-FFFFFF flex-v-center rounded-10" key={item.title} onClick={() => { onItemTap(item.path)}}>
           <img className="menu-icon" src={item.icon} alt="" />
           <p className="f13 lh-18 color-272727 mt-13">{item.title}</p>
         </section>

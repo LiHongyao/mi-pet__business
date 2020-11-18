@@ -7,7 +7,8 @@ import {
   renderRoutes
 } from 'react-router-config'
 import routes from './router';
-import Fallback from './components/Fallback'
+import Fallback from './components/@lgs/Fallback'
+
 
 function App() {
   return (
@@ -24,4 +25,6 @@ function App() {
   );
 }
 
-export default App;
+
+
+export default App

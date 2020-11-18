@@ -1,6 +1,26 @@
 .upload-goods {
-  .form-item {
-    height: 46px;
+  .am-list-content {
+    display: flex;
+    align-items: center;
+  }
+  .am-list-item {
+    padding: 0;
+    height: 35px;
+  }
+
+  .am-list-body::before,
+  .am-list-body::after {
+    height: 0 !important;
+  }
+
+  .am-list-content,
+  .am-input-control>input,
+  .am-list-extra {
+    font-size: 13px !important;
+  }
+
+  .value {
+    color: #828282 !important;
   }
 
   .details-image-picker {
@@ -18,48 +38,12 @@
       background-position: center center;
     }
   }
-
   .publish-button {
     width: 197px;
     height: 44px;
   }
-
-  // 列表样式
-  .lee-title-wrapper {
-    width: 52px;
-    display: flex;
-    justify-content: space-between;
-    margin-right: 21px;
-    font-size: 13px;
-    color: #272727;
-  }
-
-  .am-list-content {
-    display: flex;
-    align-items: center;
-  }
-
-  .am-list-extra {
-    display: none !important;
-  }
-
-  .am-list-item {
-    padding: 0;
-    height: 46px;
-  }
-
-  .am-list-body::before,
-  .am-list-body::after {
-    height: 0 !important;
-  }
-
-  .am-list-content,
-  .am-input-control>input,
-  .am-list-extra {
-    font-size: 13px !important;
-  }
-
-  .value {
-    color: #828282 !important;
+  .add-spec {
+    width: 100px;
+    height: 30px;
   }
 }

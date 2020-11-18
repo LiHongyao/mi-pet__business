@@ -1,11 +1,14 @@
-.menu-item {
-  width: 172px;
-  height: 189px;
-}
-.menu-item:not(:nth-child(2n)) {
-  margin-right: 11px;
-}
-.menu-icon {
-  width: 66px;
-  height: 66px;
+.home {
+  .menu-item {
+    width: 48%;
+    height: 189px;
+    margin-bottom: 4%;
+  }
+  .menu-item:not(:nth-child(2n)) {
+    margin-right: 11px;
+  }
+  .menu-icon {
+    width: 66px;
+    height: 66px;
+  }
 }
