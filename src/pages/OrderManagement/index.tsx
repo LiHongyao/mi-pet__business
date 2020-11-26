@@ -204,10 +204,10 @@ const OrderManagement: React.FC = () => {
       {/* 导出 */}
       {type === 1 && (
         <div className="handle-wrapper">
-          <div className="button bg-F82F5C color-FFFFFF flex-center mb-12  f10 lh-16 rounded-4" onClick={onExport}>导出订单</div>
-          <div className="button bg-F82F5C color-FFFFFF flex-center  f10 lh-16  rounded-4">
-            导入订单
-            <input type="file"  onChange={onImport}/>
+          <div className="button bg-F82F5C color-FFFFFF flex-center mb-12  f10 lh-16 rounded-4 noselect" onClick={onExport}>导出订单</div>
+          <div className="button bg-F82F5C color-FFFFFF flex-center  f10 lh-16  rounded-4 noselect">
+            <label htmlFor="file">导入订单</label>
+            <input id="file" type="file" onChange={onImport}/>
           </div>
         </div>
       )}
