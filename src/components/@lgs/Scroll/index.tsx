@@ -1,46 +1,98 @@
-import React, { useState, useEffect, useRef } from "react";
+/**
+ * # 使用指南
+ * 1. 安装依赖
+ * $ yarn add @better-scroll/core @better-scroll/pull-down @better-scroll/pull-up
+ *
+ * 2. 导入
+ * import Scroll, { kPullDownStatus, kPullUpStatus, kPullType, usePullDown, usePullUp } from '@/components/@lgs/Scroll'
+ * 3. 定义状态属性
+ * const listRef = useRef(null);
+ * const [scrollHeight, setScrollHeight] = useState(0);
+ * const [page, setPage] = useState(1);
+ * const [list, setList] = useState<IListItem[] | null>(null);
+ * 
+ * 4. 计算scroll高度
+ useEffect(() => {
+    const node = listRef.current;
+    if (node) {
+      setScrollHeight(
+        document.body.clientHeight - (node as HTMLDivElement).getBoundingClientRect().top,
+      );
+    }
+  }, [listRef]);
+ *
+ * 5. 使用usePullDown、usePullUp获取状态及相应的处理函数
+ * const [pullDownStatus, onPullDown, setPullDownStatus] = usePullDown(getData, true);
+ * const [pullUpStatus, onPullUp] = usePullUp(getData, pullDownStatus);
+ *
+ * 5. 使用组件
+ * <Scroll
+ *   height={scrollHeight}
+ *   pullDownStatus={pullDownStatus}
+ *   onPullDown={onPullDown}
+ *   pullUpStatus={pullUpStatus}
+ *  onPullUp={onPullUp}
+ * >
+ *   ...
+ * </Scroll>
+ *
+ * 6. getData 里面返回promise
+ */
+import React, { useState, useEffect, useRef, useImperativeHandle } from 'react';
 
-import BScroll from "@better-scroll/core";
-import Pullup from "@better-scroll/pull-up";
-import PullDown from "@better-scroll/pull-down";
+import { usePullDown, usePullUp } from './hooks';
 
-import LoadMore from "./LoadMore";
-import PullRefresh from "./PullRefresh";
+import BScroll from '@better-scroll/core';
+import Pullup from '@better-scroll/pull-up';
+import PullDown from '@better-scroll/pull-down';
 
-import "./index.scss";
+import LoadMore from './LoadMore';
+import PullRefresh from './PullRefresh';
 
-// 下拉状态
+import './index.scss';
+
 export enum kPullDownStatus {
   REFRESH = 'REFRESH',
   LOADING = 'LOADING',
   DONE = 'DONE',
+  MORE = 'MORE',
+  NO_MORE = 'NO_MORE',
 }
 
-// 上拉状态
 export enum kPullUpStatus {
   INITIAL = 'INITIAL',
   MORE = 'MORE',
   NO_MORE = 'NO_MORE',
   LOADING = 'LOADING',
-  LOADED = 'LOADED'
+  LOADED = 'LOADED',
 }
 
+export enum kPullType {
+  REFRESH = 'REFRESH',
+  LOAD_MORE = 'LOAD_MORE',
+}
 
 BScroll.use(Pullup).use(PullDown);
 
 interface IProps {
-  height?: number; 
-  onScroll?: Function; 
-  onPullUp?: Function; 
-  pullUpStatus?: kPullUpStatus; 
-  onPullDown?: Function; 
-  pullDownStatus?: kPullDownStatus; 
+  children: JSX.Element | JSX.Element[];
+  height?: number;
+  onScroll?: Function;
+  onPullUp?: Function;
+  pullUpStatus?: kPullUpStatus;
+  onPullDown?: Function;
+  pullDownStatus?: kPullDownStatus;
 }
 
-const Scroll: React.FC<IProps> = (props) => {
+export interface IScrollRefs {
+  refresh: () => void /**刷新bScroll */;
+  scrollTo: (x: number, y: number, time?: number) => void /**滚动到指定位置 */;
+}
 
+const Scroll = React.forwardRef<IScrollRefs, IProps>((props, ref) => {
   const {
-    height = 500,
+    children,
+    height = document.querySelector('body')?.getBoundingClientRect().height,
     pullUpStatus,
     pullDownStatus,
     onScroll,
@@ -49,102 +101,120 @@ const Scroll: React.FC<IProps> = (props) => {
   } = props;
 
   // refs
-  const lgScrollRef = useRef<HTMLDivElement>();
+  const lgScrollRef = useRef<HTMLDivElement>(null);
 
   // states
-  const [bScroll, setBScroll] = useState(null);
+  const [bScroll, setBScroll] = useState<BScroll | null>(null);
 
   // initialize
   useEffect(() => {
-    console.log("__init_bScroll__");
-    const scroll = new BScroll(lgScrollRef.current, {
-      scrollY: true,
-      probeType: 3, // 实时派发scroll事件
-      bounce: {
-        top: true,
-        right: false,
-        bottom: false,
-        left: false,
-      },
-      pullUpLoad: !!onPullUp,
-      pullDownRefresh: !!onPullDown
-        ? {
-            threshold: 80,
-            stop: 60,
-          }
-        : false,
-      click: true
-    });
-    setBScroll(scroll);
-    return () => {
-      setBScroll(null);
-    };
-  }, [onPullDown, onPullUp]);
+    const node = lgScrollRef.current;
+    if (node) {
+      const scroll = new BScroll(node, {
+        scrollY: true,
+        probeType: 3, // 实时派发scroll事件
+        bounce: {
+          top: true,
+          right: false,
+          bottom: false,
+          left: false,
+        },
+        pullUpLoad: true,
+        pullDownRefresh: onPullDown
+          ? {
+              threshold: 90,
+              stop: 80,
+            }
+          : undefined,
+        click: true,
+      });
+      setBScroll(scroll);
+      return () => {
+        setBScroll(null);
+      };
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // => 滚动
   useEffect(() => {
     if (!bScroll || !onScroll) return;
-    bScroll.on("scroll", onScroll);
+    bScroll.on('scroll', onScroll);
     return () => {
-      bScroll.off("scroll", onScroll);
+      bScroll.off('scroll', onScroll);
     };
   }, [bScroll, onScroll]);
 
   // => 上拉加载更多
   useEffect(() => {
-    // 如果bScrool或者onPullUp不存在再或者上拉加载状态为初始状态，则不响应上拉加载
-    if (!bScroll || !onPullUp || pullUpStatus === kPullUpStatus.NO_MORE || pullUpStatus === kPullUpStatus.INITIAL) return;
-    bScroll.on("pullingUp", onPullUp);
+    if (!bScroll || !onPullUp) return;
+    bScroll.on('pullingUp', onPullUp);
     bScroll.finishPullUp();
     return () => {
-      bScroll.off("pullingUp", onPullUp);
+      bScroll.off('pullingUp', onPullUp);
     };
-  }, [bScroll, onPullUp, pullUpStatus]);
+  }, [bScroll, onPullUp]);
 
   // =>下拉刷新
   useEffect(() => {
     if (!bScroll || !onPullDown) return;
-    bScroll.on("pullingDown", onPullDown);
+    bScroll.on('pullingDown', onPullDown);
     return () => {
-      bScroll.off("pullingDown", onPullDown);
+      bScroll.off('pullingDown', onPullDown);
     };
   }, [bScroll, onPullDown]);
 
-
-
   // 监听 - 上拉状态变化
   useEffect(() => {
-    
-    if(bScroll && (pullUpStatus === kPullUpStatus.MORE || pullUpStatus === kPullUpStatus.NO_MORE)) {
+    if (
+      bScroll &&
+      (pullUpStatus === kPullUpStatus.MORE ||
+        pullUpStatus === kPullUpStatus.NO_MORE)
+    ) {
       let _timer = setTimeout(() => {
-        console.log('___上拉/刷新scroll____')
-        bScroll.finishPullUp()
+        bScroll.finishPullUp();
         bScroll.refresh();
         clearTimeout(_timer);
       }, 300);
     }
-  }, [bScroll, pullUpStatus])
+  }, [bScroll, pullUpStatus]);
   // 监听 - 下拉状态变化
   useEffect(() => {
-    if(bScroll && pullDownStatus === kPullDownStatus.DONE) {
-      console.log('___下拉/刷新scroll____')
+    if (bScroll && pullDownStatus === kPullDownStatus.DONE) {
       let _timer = setTimeout(() => {
-        bScroll.finishPullDown()
+        bScroll.finishPullDown();
         bScroll.refresh();
         clearTimeout(_timer);
       }, 300);
     }
-  }, [bScroll, pullDownStatus])
+  }, [bScroll, pullDownStatus]);
 
   // 监听高度变化
   useEffect(() => {
-    if(bScroll) {
+    if (bScroll) {
       bScroll.refresh();
     }
-  }, [bScroll, height])
+  }, [bScroll, height, children]);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      refresh: () => {
+        bScroll?.refresh();
+      },
+      scrollTo: (x: number, y: number, time?: number) => {
+        bScroll?.scrollTo(x, y, time);
+      },
+    }),
+    [bScroll],
+  );
 
   return (
-    <div className="lg-scroll" style={height ? {height: height + 'px' } : {} } ref={lgScrollRef}>
+    <div
+      className="lg-scroll"
+      style={height ? { height: height + 'px' } : {}}
+      ref={lgScrollRef}
+    >
       {/* 滚动内容 */}
       <div
         className="lhy-scroll__content"
@@ -155,11 +225,14 @@ const Scroll: React.FC<IProps> = (props) => {
         {/* 滚动内容 */}
         {props.children}
         {/* 上拉加载 */}
-        {onPullUp && (<LoadMore visible={!!pullUpStatus} status={pullUpStatus} />)}
+        {onPullUp && (
+          <LoadMore visible={!!pullUpStatus} status={pullUpStatus} />
+        )}
       </div>
     </div>
   );
-};
+});
+
+export { usePullDown, usePullUp };
 
 export default Scroll;
-

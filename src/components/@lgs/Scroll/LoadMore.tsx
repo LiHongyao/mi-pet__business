@@ -1,6 +1,6 @@
-import React, { memo, FC } from "react";
-import { kPullUpStatus } from './index'
-import "./LoadMore.scss";
+import React, { memo, FC } from 'react';
+import { kPullUpStatus } from './index';
+import './LoadMore.scss';
 
 interface Iprops {
   height?: string;
@@ -9,18 +9,16 @@ interface Iprops {
   visible?: boolean;
 }
 
-const LoadMore: FC<Iprops> = (props) => {
-
+const LoadMore: FC<Iprops> = props => {
   let {
-    color = "#999999",
+    color = '#999999',
     visible = false,
     status = kPullUpStatus.MORE,
-    height = "60px",
   } = props;
 
   const statusText = (status: kPullUpStatus) => {
-    switch(status) {
-      case kPullUpStatus.MORE: 
+    switch (status) {
+      case kPullUpStatus.MORE:
         return '上拉加载更多';
       case kPullUpStatus.NO_MORE:
         return '没有更多啦~';
@@ -29,40 +27,38 @@ const LoadMore: FC<Iprops> = (props) => {
       case kPullUpStatus.LOADED:
         return '加载完成';
     }
-  }
-
+  };
 
   return (
-    <div
-      className="lg-load-more"
-      style={{ height, opacity: visible ? 1 : 0 , paddingTop: status === kPullUpStatus.LOADING ? '0' : '20px'}}
-    >
-      {/* loading图标 */}
-      {status === kPullUpStatus.LOADING && (
-        <div className="lg-load-more__gif">
-          <div className="load1">
-            <div style={{ background: color }} />
-            <div style={{ background: color }} />
-            <div style={{ background: color }} />
-            <div style={{ background: color }} />
+    <div className="lg-load-more" style={{ opacity: visible ? 1 : 0 }}>
+      <div className="lg-load-more__wrapper">
+        {/* loading图标 */}
+        {status === kPullUpStatus.LOADING && (
+          <div className="lg-load-more__gif">
+            <div className="load1">
+              <div style={{ background: color }} />
+              <div style={{ background: color }} />
+              <div style={{ background: color }} />
+              <div style={{ background: color }} />
+            </div>
+            <div className="load2">
+              <div style={{ background: color }} />
+              <div style={{ background: color }} />
+              <div style={{ background: color }} />
+              <div style={{ background: color }} />
+            </div>
+            <div className="load3">
+              <div style={{ background: color }} />
+              <div style={{ background: color }} />
+              <div style={{ background: color }} />
+              <div style={{ background: color }} />
+            </div>
           </div>
-          <div className="load2">
-            <div style={{ background: color }} />
-            <div style={{ background: color }} />
-            <div style={{ background: color }} />
-            <div style={{ background: color }} />
-          </div>
-          <div className="load3">
-            <div style={{ background: color }} />
-            <div style={{ background: color }} />
-            <div style={{ background: color }} />
-            <div style={{ background: color }} />
-          </div>
+        )}
+        {/* 文字 */}
+        <div className="lg-load-more__text" style={{ color }}>
+          {statusText(status)}
         </div>
-      )}
-      {/* 文字 */}
-      <div className="lg-load-more__text" style={{ color }}>
-        {statusText(status)}
       </div>
     </div>
   );

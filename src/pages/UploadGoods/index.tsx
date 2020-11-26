@@ -36,7 +36,6 @@ const DATA_EXP = (() => {
   return arr;
 })();
 
-let added = false;
 // 规格数据
 let specs: Array<ISpec> = [] as Array<ISpec>;
 const UploadGoods: React.FC = () => {
@@ -98,7 +97,6 @@ const UploadGoods: React.FC = () => {
         const spec = specs[i];
         const reg = new RegExp('^\\d+$')
         if(!reg.test(spec.original_price) || !reg.test(spec.wholesale_price)) {
-          debugger
           title = '批发价或者售价必须是数字';
           break;
         }
@@ -129,10 +127,7 @@ const UploadGoods: React.FC = () => {
     specs[index][key] = value;
   }, []);
   const onPublish = () => {
-    if(added) {
-      Toast.info('请勿重复上传！');
-      return;
-    }
+    if(loading) return;
     check().then(() => {
       setLoading(true);
       // 处理规格/计算售价/默认9折
@@ -160,6 +155,7 @@ const UploadGoods: React.FC = () => {
           type: 'goods_details'
         }).then(res => {
           infos = res.data;
+          console.log(infos);
           Api.goods.add({
             banners,
             infos,
@@ -174,7 +170,8 @@ const UploadGoods: React.FC = () => {
             Toast.info('新增商品成功！', 1, () => {
               history.goBack();
             })
-          
+          }).catch(error => {
+            setLoading(false);
           })
         })
       })

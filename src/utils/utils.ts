@@ -59,5 +59,26 @@ class Utils {
     res += hour + ':' + minute + ':' + second;
     return res;
   }
+   /**
+   * 复制内容至剪贴板
+   */
+  public static clipboard(value: string) {
+    return new Promise((resolve, reject) => {
+      let input = document.createElement('input');
+      input.setAttribute('style', 'display: block; width: 1px; height: 1px;');
+      input.setAttribute('readonly', 'readonly');
+      input.setAttribute('value', value);
+      document.body.appendChild(input);
+      input.setSelectionRange(0, Infinity);
+      input.select();
+      let result = document.execCommand('copy');
+      document.body.removeChild(input);
+      if (result) {
+        resolve();
+      } else {
+        reject();
+      }
+    });
+  }
 }
 export default Utils;

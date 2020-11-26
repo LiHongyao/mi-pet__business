@@ -18,7 +18,7 @@ import * as serviceWorker from './serviceWorker';
 
 import { Toast } from 'antd-mobile'
 Toast.config({
-  duration: 1
+  duration: 2
 });
 
 

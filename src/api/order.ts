@@ -43,4 +43,24 @@ export function deliver(data: {
   })
 }
 
+/**
+ * 导出
+ */
+export function download() {
+  return request({
+    url: '/merchant/order/download'
+  })
+}
+
+/**
+ * 导入
+ */
+export function importIn(file: any) {
+  return request({
+    url: '/merchant/order/import',
+    method: 'POST',
+    data: { file }
+  })
+}
+
 

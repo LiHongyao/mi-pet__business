@@ -7,8 +7,11 @@ import { useParams } from 'react-router'
 
 import SpecBox from '../../components/SpecBox'
 
+interface IParams {
+  goodsId: string;
+}
 const GoodsDetails: React.FC = () => {
-  const { goodsId } = useParams();
+  const { goodsId } = useParams<IParams>();
   
   // state
   const [spec, setSpec] = useState<SPMS.ISpec>()
@@ -24,7 +27,7 @@ const GoodsDetails: React.FC = () => {
   useTitle('商品详情');
 
   useEffect(() => {
-    Api.goods.details(goodsId).then(res => {
+    Api.goods.details(+goodsId).then(res => {
       setData(res.data);
       setSpec(res.data.specifications[0])
     })
