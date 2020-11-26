@@ -28,6 +28,9 @@ const OrderManagement: React.FC = () => {
   const [page, setPage] = useState(1);
   const [scrollHeight, setScrollHeight] = useState(0);
 
+  const [visible, setVisible] = useState(false);
+  const [downUrl, setDownUrl] = useState('');
+
   // methods
   const getData = (ktype: kPullType) => {
     // 根据上拉/下拉处理页码
@@ -84,8 +87,8 @@ const OrderManagement: React.FC = () => {
   );
   const onExport = () => {
     Api.order.download().then(res => {
-      Toast.info('订单文件链接已复制，请打开浏览器粘贴下载');
-      Utils.clipboard(res.data)
+      setVisible(true);
+      setDownUrl(res.data);
     })
   }
  
@@ -95,6 +98,10 @@ const OrderManagement: React.FC = () => {
     // 上传文件
     const file = event.target.files[0];
     if(!file) return;
+    if(!/.xlsx?^/.test(file.name)) {
+      Toast.info('仅支持.xlsx/.xls类型的文件');
+      return;
+    }
     const formData = new FormData();
     formData.append('file', file);
     fetch(`${process.env.REACT_APP_HOST}/merchant/order/import`, {
@@ -145,6 +152,16 @@ const OrderManagement: React.FC = () => {
 
   return (
     <div className="page order-management">
+      {/* 弹框 */}
+      <div className={`dialog ${visible ? 'visible' : ''}`}>
+        <div className="dialog__content">
+          <div className="dialog__tips">订单文件链接已复制，请打开浏览器粘贴下载</div>
+          <div className="dialog__button" onClick={() => {
+            Utils.clipboard(downUrl);
+            setVisible(false);
+          }}>知道了</div>
+        </div>
+      </div>
       {/* menu */}
       <div className="menu">
         {["待发货", "已完成", "退款/售后"].map((item, i) => (
@@ -190,7 +207,7 @@ const OrderManagement: React.FC = () => {
           <div className="button bg-F82F5C color-FFFFFF flex-center mb-12  f10 lh-16 rounded-4" onClick={onExport}>导出订单</div>
           <div className="button bg-F82F5C color-FFFFFF flex-center  f10 lh-16  rounded-4">
             导入订单
-            <input type="file" accept=".xlsx,.xls" onChange={onImport}/>
+            <input type="file"  onChange={onImport}/>
           </div>
         </div>
       )}
