@@ -98,10 +98,10 @@ const OrderManagement: React.FC = () => {
     // 上传文件
     const file = event.target.files[0];
     if(!file) return;
-    if(!/.xlsx?^/.test(file.name)) {
-      Toast.info('仅支持.xlsx/.xls类型的文件');
-      return;
-    }
+    // if(!/.xlsx?^/.test(file.name)) {
+    //   Toast.info('仅支持.xlsx/.xls类型的文件');
+    //   return;
+    // }
     const formData = new FormData();
     formData.append('file', file);
     fetch(`${process.env.REACT_APP_HOST}/merchant/order/import`, {
